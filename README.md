@@ -152,7 +152,10 @@ feedbackAllMask | 所有以上的反馈
         }
     }
 
-##关于作者
+## 关于作者 
+
 英文名:ccx
-个人博客:[http://www.ccx1.top](http://www.ccx1.top)<br>
-Email:cunxiangchi@gmail.com<br>
+
+个人博客:[http://www.ccx1.top](http://www.ccx1.top)
+
+Email:cunxiangchi@gmail.com
