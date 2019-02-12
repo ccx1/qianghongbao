@@ -3,18 +3,11 @@
 #### 效果预览
 ![](show_min.gif)
 
-####源码下载地址:[https://github.com/lendylongli/qianghongbao](https://github.com/lendylongli/qianghongbao)
-####apk下载地址 : <a href="http://t.cn/RbrdRHe" target="_blank">下载最新版本</a>
+#### 源码下载地址:[https://github.com/ccx1/qianghongbao](https://github.com/ccx1/qianghongbao)
 
-##前言
-Codeboy抢红包是我在2015年春节过年期间编写的一个开源的兴趣项目，只要是将整个核心抢红包的流程编写出来，至于再复杂的一些操作就没深入研究。当这个项目发布后，也是反应挺大的，很多网友也找到我了与交流，也有做淘宝的人给钱让我去增加一些功能，当然我是拒绝的。而本文通过抢红包这个示例去讲解AccessibilityService的用途，希望大家能举一反三去学习这个辅助服务的强大之处。
 
 ##免责声明
 本软件仅供学习使用，完全模拟人工操作，抢红包速度取决于你手机的性能与网络，不涉及任何第三方软件接口，本软件已开放源代码，无病毒、不收集用户隐私信息，禁止使用本软件参与赌博活动。一切因使用“Codeboy抢红包”造成的任何后果，Codeboy抢红包概不负责，亦不承担任何法律责任!
-
-##作者声明
-在这里，我声明一下，我所做的是自己有兴趣的事情，只是通过开源的方式让大家去学习相关技术，并不是为了营利，而我也知道淘宝上有人直接拿我的应用去售卖，这些都是没经过我的允许，我也没有半点收益，我留下联系方式是为了方便开发者之间的讨论与学习，所以请商业合作的与小白不要加我QQ，谢谢。
-由于加我的人太多，大部分是咨询抢红包的事情，在这里也再声明一下，不再更新抢红包的工作，在这方面也不再想交流什么，如果你有什么好的idea（非红包方面），可以共同探讨。
 
 ##技术详述
 一开始大家都会觉得做一个Android外挂会汲取很多东西或者底层的东西,但当发现Android里有一个叫`AccessibilityService`的服务时，一切都变得很简单。
@@ -126,25 +119,40 @@ feedbackAllMask | 所有以上的反馈
 
 具体内容请看源码
 
-##其它
-####如何防止外挂
-在了解整个核心后,获取事件不外乎就是通过文本与id判断，那么就可以将文本改为图标方式，将id改为动态id(每次显示都是随机生成),这样一来就可以提高外挂的门槛。
+### 修改点.对其中的handleLuckyMoneyReceive进行了修改
 
-####如何发红包会安全点
-现在抢红包就看谁的外挂工具反应够快,如何去干扰这些外挂，其实也有点小技巧，就是在发红包前，发送文本`[微信红包]`,可以导致部分外挂工具失效。
 
-版本归作者所有,转载请注明出处:[http://www.happycodeboy.com/index.php/archives/10/](http://www.happycodeboy.com/index.php/archives/10/)
+    /**
+     * 点击聊天里的红包后，显示的界面
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void handleLuckyMoneyReceive() {
+        ...
+        // 寻找buttonid
+            String buttonId = "com.tencent.mm:id/c22";
 
-##打赏作者
-如果你觉得这篇文章或源码对你有帮助又或者你使用Codeboy抢红包包感觉很爽，可以打赏作者作为鼓励哦~
+            if (wechatVersion == 700) {
+                buttonId = "com.tencent.mm:id/c22";
+            }
 
-###支付宝
-![](alipay.png)
-
-###微信扫一扫
-![](wechatpay.jpg)
+           ...
+	// 核心
+        if (targetNode == null) {
+            Log.i(TAG, "handleLuckyMoneyReceive: 回到桌面");
+            Intent intent = new Intent();// 为Intent设置Action、Category属性
+            intent.setAction(Intent.ACTION_MAIN);// "android.intent.action.MAIN"
+            intent.addCategory(Intent.CATEGORY_HOME); //"android.intent.category.HOME"
+            this.getContext().startActivity(intent);
+            getHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getWechatApi();
+                }
+            }, 500);
+        }
+    }
 
 ##关于作者
-英文名:Leon<br>
-个人博客:[http://www.happycodeboy.com](http://www.happycodeboy.com)<br>
-Email:codeboy2013@gmail.com<br>
+英文名:ccx
+个人博客:[http://www.ccx1.top](http://www.ccx1.top)<br>
+Email:cunxiangchi@gmail.com<br>
